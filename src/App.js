@@ -83,6 +83,9 @@ export default function App() {
 					<Marker
 						key={marker.time.toISOString()}
 						position={{ lat: marker.lat, lng: marker.lng }}
+						icon={{
+							url: '/leaf.svg',
+						}}
 					/>
 				))}
 			</GoogleMap>
