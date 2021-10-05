@@ -33,7 +33,7 @@ const center = {
 
 const options = {
 	styles: mapStyles,
-	disableDefaultUI: false,
+	disableDefaultUI: true,
 };
 
 function Map() {
@@ -50,19 +50,42 @@ export default function App() {
 		googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
 		libraries,
 	});
+	const [markers, setMarkers] = React.useState([]);
 
 	if (loadError) return 'Error loading Maps';
 	if (!isLoaded) return 'Loading Maps';
 
 	return (
 		<div>
-			<h1>FarmGo🌿</h1>
+			<h1>
+				FarmGo
+				<span role="img" aria-label="leaf">
+					🌿
+				</span>
+			</h1>
 			<GoogleMap
 				mapContainerStyle={mapContainerStyle}
 				zoom={10}
 				center={center}
 				options={options}
-			></GoogleMap>
+				onClick={(event) => {
+					setMarkers((current) => [
+						...current,
+						{
+							lat: event.latLng.lat(),
+							lng: event.latLng.lng(),
+							time: new Date(),
+						},
+					]);
+				}}
+			>
+				{markers.map((marker) => (
+					<Marker
+						key={marker.time.toISOString()}
+						position={{ lat: marker.lat, lng: marker.lng }}
+					/>
+				))}
+			</GoogleMap>
 		</div>
 	);
 }
